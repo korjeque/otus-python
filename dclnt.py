@@ -21,7 +21,6 @@ Path = ''
 def get_trees(_path, with_filenames=False, with_file_content=False):
     filenames = []
     trees = []
-    path= Path
     for dirname, dirs, files in os.walk(path, topdown=True):
         for file in files:
             if file.endswith('.py'):
@@ -65,9 +64,7 @@ def get_all_words_in_path(path):
 
 
 def get_top_verbs_in_path(path, top_size=10):
-    global Path
-    Path = path
-    trees = [t for t in get_trees(None) if t]
+    trees = [t for t in get_trees(path) if t]
     fncs = [f for f in flat([[node.name.lower() for node in ast.walk(t) if isinstance(node, ast.FunctionDef)] for t in trees]) if not (f.startswith('__') and f.endswith('__'))]
     print('functions extracted')
     verbs = flat([get_verbs_from_function_name(function_name) for function_name in fncs])
